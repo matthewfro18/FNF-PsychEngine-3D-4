@@ -75,7 +75,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 
 		camHUD = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
-		FlxG.cameras.add(camHUD, false);
+		FlxG.cameras.add(camHUD);
 
 		loadBG();
 
@@ -117,7 +117,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		healthBar.scrollFactor.set();
 		healthBar.cameras = [camHUD];
 
-		healthIcon = new HealthIcon(character.healthIcon, false, false);
+		healthIcon = new HealthIcon(character.healthIcon);
 		healthIcon.y = FlxG.height - 150;
 		healthIcon.cameras = [camHUD];
 
@@ -299,9 +299,9 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 						Paths.loadAnimateAtlas(animateGhost, character.imageFile);
 					
 					if(myAnim.indices != null && myAnim.indices.length > 0)
-						animateGhost.anim.addBySymbolIndices('anim', myAnim.name, myAnim.indices, 0, false);
+						animateGhost.anim.addBySymbolIndices('anim', myAnim.name, myAnim.indices, 0);
 					else
-						animateGhost.anim.addBySymbol('anim', myAnim.name, 0, false);
+						animateGhost.anim.addBySymbol('anim', myAnim.name, 0);
 
 					animateGhost.anim.play('anim', true, false, character.atlas.anim.curFrame);
 					animateGhost.anim.pause();
@@ -712,7 +712,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		{
 			if(sender == healthIconInputText) {
 				var lastIcon = healthIcon.getCharacter();
-				healthIcon.changeIcon(healthIconInputText.text, false);
+				healthIcon.changeIcon(healthIconInputText.text);
 				character.healthIcon = healthIconInputText.text;
 				if(lastIcon != healthIcon.getCharacter()) updatePresence();
 				unsavedProgress = true;
@@ -1127,7 +1127,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		healthColorStepperG.value = character.healthColorArray[1];
 		healthColorStepperB.value = character.healthColorArray[2];
 		healthBar.leftBar.color = healthBar.rightBar.color = FlxColor.fromRGB(character.healthColorArray[0], character.healthColorArray[1], character.healthColorArray[2]);
-		healthIcon.changeIcon(character.healthIcon, false);
+		healthIcon.changeIcon(character.healthIcon);
 		updatePresence();
 	}
 
