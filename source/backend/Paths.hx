@@ -29,6 +29,27 @@ class Paths
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
 	inline public static var VIDEO_EXT = "mp4";
 
+	static public function getImagePNG(key:String)
+	{
+		if (!Cashew.exists(key))
+		{
+			var tex = getBitmapPNG(key);
+			var gfx = FlxGraphic.fromBitmapData(BitmapData.fromTexture(tex), false, key, false);
+			gfx.destroyOnNoUse = false;
+			Cashew.cache(key, gfx, tex);
+		}
+		return Cashew.get(key);
+	}
+
+	static public function getSparrowAtlasPNG(key:String)
+	{
+		return FlxAtlasFrames.fromSparrow(getImagePNG(key), xml(key));
+	}
+
+	static public function getPackerAtlasPNG(key:String)
+	{
+		return FlxAtlasFrames.fromSpriteSheetPacker(getImagePNG(key), text(key, "images"));
+	}
 	public static function excludeAsset(key:String) {
 		if (!dumpExclusions.contains(key))
 			dumpExclusions.push(key);
