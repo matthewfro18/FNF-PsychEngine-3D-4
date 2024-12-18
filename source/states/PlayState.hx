@@ -48,6 +48,12 @@ import psychlua.LuaUtils;
 import psychlua.HScript;
 #end
 
+//3d shit
+import flx3d.Flx3DView;
+import flx3d.Flx3DUtil;
+import flx3d.Flx3DCamera;
+import flx3d.FlxView3D;
+
 #if HSCRIPT_ALLOWED
 import crowplexus.iris.Iris;
 #end
