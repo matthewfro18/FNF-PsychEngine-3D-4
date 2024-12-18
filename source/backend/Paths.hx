@@ -53,12 +53,12 @@ class Paths
 		return Cashew.get(key);
 	}
 
-	static public function getSparrowAtlasPNG(key:String, ?folder:String))
+	static public function getSparrowAtlasPNG(key:String, ?folder:String)
 	{
 		return FlxAtlasFrames.fromSparrow(getImagePNG(key), xml(key, folder));
 	}
 
-	static public function getPackerAtlasPNG(key:String, ?folder:String))
+	static public function getPackerAtlasPNG(key:String, ?folder:String)
 	{
 		return FlxAtlasFrames.fromSpriteSheetPacker(getImagePNG(key, folder), text(key, folder,"images"));
 	}
