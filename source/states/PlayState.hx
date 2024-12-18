@@ -558,6 +558,7 @@ class PlayState extends MusicBeatState
 			+ healthBar.height / 2
 			- healthBarP1.height / 2);
 		healthBarP1.antialiasing = true;
+		add(healthBarP1);
 
 
 		healthBarP2 = new FlxSprite().loadGraphic(Paths.getImagePNG("healthBar2Inner"));
@@ -568,6 +569,7 @@ class PlayState extends MusicBeatState
 			+ healthBar.height / 2
 			- healthBarP2.height / 2);
 		healthBarP2.antialiasing = true;
+		add(healthBarP2);
 
 		healthBarP2.color = (Main.characterColors[SONG.player2] != null ? Main.characterColors[SONG.player2] : 0xFFFF0000);
 		
