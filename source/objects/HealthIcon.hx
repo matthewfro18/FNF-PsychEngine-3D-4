@@ -1,64 +1,116 @@
 package objects;
 
+import sys.FileSystem;
+import flixel.util.FlxDestroyUtil;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.FlxSprite;
+import openfl.utils.Assets as OpenFlAssets;
+
+using StringTools;
+
 class HealthIcon extends FlxSprite
 {
 	public var sprTracker:FlxSprite;
+	private var isOldIcon:Bool = false;
 	private var isPlayer:Bool = false;
-	private var char:String = '';
 
-	public function new(char:String = 'face', isPlayer:Bool = false, ?allowGPU:Bool = true)
+	public var defualtIconScale:Float = 1.0;
+	public var iconScale:Float = 1.0;
+	public var iconSize:Float = 128;
+
+	var char:String;
+	public var status:String = "normal";
+
+	private var tween:FlxTween;
+
+	private static final pixelIcons:Array<String> = ["bf-pixel", "senpai", "senpai-angry", "spirit"];
+
+	public function new(char:String = 'face', isPlayer:Bool = false, ?_id:Int = -1)
 	{
 		super();
-		this.isPlayer = isPlayer;
-		changeIcon(char, allowGPU);
+		flipX = isPlayer;
+
+		changeChar(char);
+
+		normal();
+
+		antialiasing = !pixelIcons.contains(char);
 		scrollFactor.set();
+
+		tween = FlxTween.tween(this, {}, 0);
+	}
+
+	public function changeChar(char:String)
+	{
+		if (FileSystem.exists("assets/images/healthicons/" + char))
+			this.char = char;
+		else
+			this.char = "face";
+	}
+
+	public function normal()
+	{
+		if (FileSystem.exists("assets/images/healthicons/" + char + "/normal.png"))
+			loadGraphic(Paths.image("healthicons/" + char + "/normal"));
+		status = "normal";
+	}
+
+	public function win()
+	{
+		if (FileSystem.exists("assets/images/healthicons/" + char + "/win.png"))
+			loadGraphic(Paths.image("healthicons/" + char + "/win"));
+		status = "win";
+	}
+
+	public function lose()
+	{
+		if (FileSystem.exists("assets/images/healthicons/" + char + "/lose.png"))
+			loadGraphic(Paths.image("healthicons/" + char + "/lose"));
+		status = "lose";
 	}
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+		setGraphicSize(Std.int(iconSize * iconScale));
+		updateHitbox();
+	}
 
-		if (sprTracker != null)
-			setPosition(sprTracker.x + sprTracker.width + 12, sprTracker.y - 30);
+
+	public function swapOldIcon() {
+		if(isOldIcon = !isOldIcon) changeIcon('bf-old');
+		else changeIcon('bf');
 	}
 
 	private var iconOffsets:Array<Float> = [0, 0];
-	public function changeIcon(char:String, ?allowGPU:Bool = true) {
-		if(this.char != char) {
-			var name:String = 'icons/' + char;
-			if(!Paths.fileExists('images/' + name + '.png', IMAGE)) name = 'icons/icon-' + char; //Older versions of psych engine's support
-			if(!Paths.fileExists('images/' + name + '.png', IMAGE)) name = 'icons/icon-face'; //Prevents crash from missing icon
-			
-			var graphic = Paths.image(name, allowGPU);
-			var iSize:Float = Math.round(graphic.width / graphic.height);
-			loadGraphic(graphic, true, Math.floor(graphic.width / iSize), Math.floor(graphic.height));
-			iconOffsets[0] = (width - 150) / iSize;
-			iconOffsets[1] = (height - 150) / iSize;
-			updateHitbox();
-
-			animation.add(char, [for(i in 0...frames.frames.length) i], 0, false, isPlayer);
-			animation.play(char);
+	public function changeIcon(char:String) {
+		if (FileSystem.exists("assets/images/healthicons/" + char))
 			this.char = char;
-
-			if(char.endsWith('-pixel'))
-				antialiasing = false;
-			else
-				antialiasing = ClientPrefs.data.antialiasing;
-		}
+		else
+			this.char = "face";
 	}
 
-	public var autoAdjustOffset:Bool = true;
+	public function tweenToDefaultScale(_time:Float, _ease:Null<flixel.tweens.EaseFunction>)
+	{
+		tween.cancel();
+		tween = FlxTween.tween(this, {iconScale: this.defualtIconScale}, _time, {ease: _ease});
+	}
+
 	override function updateHitbox()
 	{
 		super.updateHitbox();
-		if(autoAdjustOffset)
-		{
-			offset.x = iconOffsets[0];
-			offset.y = iconOffsets[1];
-		}
+		offset.x = iconOffsets[0];
+		offset.y = iconOffsets[1];
 	}
 
 	public function getCharacter():String {
 		return char;
+	}
+
+	override public function destroy()
+	{
+		tween = FlxDestroyUtil.destroy(tween);
+		super.destroy();
 	}
 }
