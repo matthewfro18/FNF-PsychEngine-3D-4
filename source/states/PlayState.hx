@@ -550,21 +550,21 @@ class PlayState extends MusicBeatState
 		uiGroup.add(healthBar);
 
 		healthBarP1 = new FlxSprite().loadGraphic(Paths.getImagePNG("healthBar2Inner"));
-		healthBarP1.setPosition(healthBarBG.x
-			+ healthBarBG.width / 2
+		healthBarP1.setPosition(healthBar.x
+			+ healthBar.width / 2
 			- healthBarP1.width / 2,
-			healthBarBG.y
-			+ healthBarBG.height / 2
+			healthBar.y
+			+ healthBar.height / 2
 			- healthBarP1.height / 2);
 		healthBarP1.antialiasing = true;
 
 
 		healthBarP2 = new FlxSprite().loadGraphic(Paths.getImagePNG("healthBar2Inner"));
-		healthBarP2.setPosition(healthBarBG.x
-			+ healthBarBG.width / 2
+		healthBarP2.setPosition(healthBar.x
+			+ healthBar.width / 2
 			- healthBarP2.width / 2,
-			healthBarBG.y
-			+ healthBarBG.height / 2
+			healthBar.y
+			+ healthBar.height / 2
 			- healthBarP2.height / 2);
 		healthBarP2.antialiasing = true;
 
