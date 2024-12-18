@@ -110,10 +110,6 @@ class HealthIcon extends FlxSprite
 		offset.y = iconOffsets[1];
 	}
 
-	public function getCharacter():String {
-		return char;
-	}
-
 	override public function destroy()
 	{
 		tween = FlxDestroyUtil.destroy(tween);
