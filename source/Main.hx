@@ -54,9 +54,16 @@ class Main extends Sprite
 		startFullscreen: false // if the game should start at fullscreen mode
 	};
 
-	public static var fpsVar:FPSCounter;
+	public static var fpsVar:FPSCounter;	
+	
+	public static var characterColors:Map<String, FlxColor> = [];
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
+
+	public static function addCharacter(who:String, name:String, quote:String, desc:String, song:String, color:FlxColor = FlxColor.WHITE, ?credit:String)
+	{
+		characterColors[who] = color;
+	}
 
 	public static function main():Void
 	{
@@ -73,6 +80,13 @@ class Main extends Sprite
 		#elseif ios
 		Sys.setCwd(lime.system.System.applicationStorageDirectory);
 		#end
+
+		characterColors["gf"] = 0xa5004d;
+		characterColors["prisma"] = 0x9fd5ed;
+		characterColors["skid"] = 0xa2a2a2;
+		characterColors["pump"] = 0xd57e00;
+		characterColors["senpai"] = 0xfac146;
+		characterColors["tankman"] = 0x383838;
 
 		if (stage != null)
 		{
