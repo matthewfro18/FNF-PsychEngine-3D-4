@@ -97,6 +97,12 @@ class HealthIcon extends FlxSprite
 		tween = FlxTween.tween(this, {iconScale: this.defualtIconScale}, _time, {ease: _ease});
 	}
 
+
+	public var autoAdjustOffset:Bool = true;
+	public function getCharacter():String {
+		return char;
+	}
+
 	override function updateHitbox()
 	{
 		super.updateHitbox();
