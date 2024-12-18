@@ -31,9 +31,9 @@ class Paths
 
 	static var tmpPNGBytes:BitmapData = null;
 
-	static public function getBitmapPNG(key:String)
+	static public function getBitmapPNG(key:String, ?folder:String)
 	{
-		tmpPNGBytes = BitmapData.fromFile(Paths.image(key));
+		tmpPNGBytes = BitmapData.fromFile(Paths.image(key, folder));
 		var texture = FlxG.stage.context3D.createTexture(tmpPNGBytes.width, tmpPNGBytes.height, Context3DTextureFormat.BGRA, false);
 		texture.uploadFromBitmapData(tmpPNGBytes);
 		tmpPNGBytes.dispose();
@@ -41,26 +41,26 @@ class Paths
 		return texture;
 	}
 
-	static public function getImagePNG(key:String)
+	static public function getImagePNG(key:String, ?folder:String))
 	{
 		if (!Cashew.exists(key))
 		{
-			var tex = getBitmapPNG(key);
-			var gfx = FlxGraphic.fromBitmapData(BitmapData.fromTexture(tex), false, key, false);
+			var tex = getBitmapPNG(key, folder);
+			var gfx = FlxGraphic.fromBitmapData(BitmapData.fromTexture(tex), false, key, folder, false);
 			gfx.destroyOnNoUse = false;
 			Cashew.cache(key, gfx, tex);
 		}
 		return Cashew.get(key);
 	}
 
-	static public function getSparrowAtlasPNG(key:String)
+	static public function getSparrowAtlasPNG(key:String, ?folder:String))
 	{
-		return FlxAtlasFrames.fromSparrow(getImagePNG(key), xml(key));
+		return FlxAtlasFrames.fromSparrow(getImagePNG(key), xml(key, folder));
 	}
 
-	static public function getPackerAtlasPNG(key:String)
+	static public function getPackerAtlasPNG(key:String, ?folder:String))
 	{
-		return FlxAtlasFrames.fromSpriteSheetPacker(getImagePNG(key), text(key, "images"));
+		return FlxAtlasFrames.fromSpriteSheetPacker(getImagePNG(key, folder), text(key, folder,"images"));
 	}
 
 	inline static public function text(key:String, ?location:String = "data")
