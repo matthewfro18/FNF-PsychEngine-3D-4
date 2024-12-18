@@ -63,6 +63,11 @@ class Paths
 		return FlxAtlasFrames.fromSpriteSheetPacker(getImagePNG(key), text(key, "images"));
 	}
 
+	inline static public function text(key:String, ?location:String = "data")
+	{
+		return file(key, location, "txt");
+	}
+
 	public static function excludeAsset(key:String) {
 		if (!dumpExclusions.contains(key))
 			dumpExclusions.push(key);
