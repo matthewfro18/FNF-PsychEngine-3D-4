@@ -111,7 +111,6 @@ class PlayState extends MusicBeatState
 	public var boyfriendMap:Map<String, Character> = new Map<String, Character>();
 	public var dadMap:Map<String, Character> = new Map<String, Character>();
 	public var gfMap:Map<String, Character> = new Map<String, Character>();
-	public var variables:Map<String, Dynamic> = new Map<String, Dynamic>();
 	public var modchartTweens:Map<String, FlxTween> = new Map();
 	public var modchartSprites:Map<String, ModchartSprite> = new Map();
 	public var modchartViews:Map<String, ModchartView> = new Map();
