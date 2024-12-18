@@ -180,8 +180,6 @@ class PlayState extends MusicBeatState
 	public var combo:Int = 0;
 
 	public var healthBar:Bar;
-	private var healthBarP1:FlxSprite;
-	private var healthBarP2:FlxSprite;
 	public var timeBar:Bar;
 	var songPercent:Float = 0;
 
@@ -271,9 +269,9 @@ class PlayState extends MusicBeatState
 
 	public static var nextReloadAll:Bool = false;
 
-	public var cam3D:Flx3DView;
-
-	override public function create()
+    public var cam3D:Flx3DView;
+	
+    override public function create()
 	{
 		//trace('Playback Rate: ' + playbackRate);
 		Paths.clearStoredMemory();
@@ -541,15 +539,6 @@ class PlayState extends MusicBeatState
 		reloadHealthBarColors();
 		uiGroup.add(healthBar);
 
-		healthBarP1.color = (Main.characterColors[SONG.player1] != null ? Main.characterColors[SONG.player1] : 0xFF66FF33);
-		healthBarP2.color = (Main.characterColors[SONG.player2] != null ? Main.characterColors[SONG.player2] : 0xFFFF0000);
-
-		healthBarP1.visible = false;
-		healthBarP2.visible = false;
-
-		if (healthBarP1.color == healthBarP2.color)
-			healthBarP2.color = FlxColor.interpolate(healthBarP2.color, FlxColor.BLACK);
-		
 		iconP1 = new HealthIcon(boyfriend.healthIcon, true);
 		iconP1.y = healthBar.y - 75;
 		iconP1.visible = !ClientPrefs.data.hideHud;
@@ -1897,21 +1886,6 @@ class PlayState extends MusicBeatState
 		var newPercent:Null<Float> = FlxMath.remapToRange(FlxMath.bound(healthBar.valueFunction(), healthBar.bounds.min, healthBar.bounds.max), healthBar.bounds.min, healthBar.bounds.max, 0, 100);
 		healthBar.percent = (newPercent != null ? newPercent : 0);
 
-
-		// var iconOffset:Int = 26;
-
-		// iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
-		// iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
-
-		if (health > 2)
-			health = 2;
-
-		iconP1.x = healthBarP1.x + (1 - health / 2.0) * healthBarP1.width;
-		iconP2.x = healthBarP1.x + (1 - health / 2.0) * healthBarP1.width - iconP2.width;
-
-		healthBarP2.clipRect.set(0, 0, (1 - health / 2.0) * healthBarP2.frameWidth, healthBarP2.frameHeight);
-		healthBarP2.clipRect = healthBarP2.clipRect;
-
 		// Heath Icons
 		if (health / 2.0 < 0.2 && iconP1.status != "lose")
 		{
@@ -1928,6 +1902,7 @@ class PlayState extends MusicBeatState
 			iconP1.normal();
 			iconP2.normal();
 		}
+		return health;
 	}
 
 	function openPauseMenu()
