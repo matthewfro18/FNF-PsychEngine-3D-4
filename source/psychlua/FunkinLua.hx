@@ -1022,10 +1022,13 @@ class FunkinLua {
 			}
 		});
 		Lua_helper.add_callback(lua, "addLuaObj", function(tag:String, modelpath:String, image:String, smooth:Bool = true) {
-			var cool:ModchartSprite = MusicBeatState.getVariables().get(tag);
-			if(cool.wasAdded) {
-				cool.addModel(Paths.obj(modelpath), function(mesh) {		
-				}, image, smooth);
+			if(PlayState.instance.modchartViews.exists(tag)) {
+				var cool:ModchartView = PlayState.instance.modchartViews.get(tag);
+				if(cool.wasAdded) {
+					cool.addModel(Paths.obj(modelpath), function(mesh) {
+						
+					}, image, smooth);
+				}
 			}
 		});
 		Lua_helper.add_callback(lua, "setGraphicSize", function(obj:String, x:Float, y:Float = 0, updateHitbox:Bool = true) {
@@ -1850,6 +1853,164 @@ class FunkinLua {
 		luaTrace('This platform doesn\'t support Runtime Shaders!', false, false, FlxColor.RED);
 		#end
 		return false;
+	}
+}
+#end
+
+class ModchartSprite extends FlxSprite
+{
+	public var wasAdded:Bool = false;
+	public var animOffsets:Map<String, Array<Float>> = new Map<String, Array<Float>>();
+	//public var isInFront:Bool = false;
+
+	public function new(?x:Float = 0, ?y:Float = 0)
+	{
+		super(x, y);
+		antialiasing = ClientPrefs.globalAntialiasing;
+	}
+}
+					
+class ModchartView extends Flx3DView
+{
+	public var wasAdded:Bool = false;
+	public function new(?x:Float = 0, ?y:Float = 0, ?w:Int = 0, ?y:Int = 0)
+	{
+		super(x, y, w, y);
+		antialiasing = ClientPrefs.globalAntialiasing;
+	}
+}
+
+class ModchartText extends FlxText
+{
+	public var wasAdded:Bool = false;
+	public function new(x:Float, y:Float, text:String, width:Float)
+	{
+		super(x, y, width, text, 16);
+		setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		cameras = [PlayState.instance.camHUD];
+		scrollFactor.set();
+		borderSize = 2;
+	}
+}
+
+class DebugLuaText extends FlxText
+{
+	private var disableTime:Float = 6;
+	public var parentGroup:FlxTypedGroup<DebugLuaText>;
+	public function new(text:String, parentGroup:FlxTypedGroup<DebugLuaText>, color:FlxColor) {
+		this.parentGroup = parentGroup;
+		super(10, 10, 0, text, 16);
+		setFormat(Paths.font("vcr.ttf"), 16, color, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scrollFactor.set();
+		borderSize = 1;
+	}
+
+	override function update(elapsed:Float) {
+		super.update(elapsed);
+		disableTime -= elapsed;
+		if(disableTime < 0) disableTime = 0;
+		if(disableTime < 1) alpha = disableTime;
+	}
+}
+
+class CustomSubstate extends MusicBeatSubstate
+{
+	public static var name:String = 'unnamed';
+	public static var instance:CustomSubstate;
+
+	override function create()
+	{
+		instance = this;
+
+		PlayState.instance.callOnLuas('onCustomSubstateCreate', [name]);
+		super.create();
+		PlayState.instance.callOnLuas('onCustomSubstateCreatePost', [name]);
+	}
+	
+	public function new(name:String)
+	{
+		CustomSubstate.name = name;
+		super();
+		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+	}
+	
+	override function update(elapsed:Float)
+	{
+		PlayState.instance.callOnLuas('onCustomSubstateUpdate', [name, elapsed]);
+		super.update(elapsed);
+		PlayState.instance.callOnLuas('onCustomSubstateUpdatePost', [name, elapsed]);
+	}
+
+	override function destroy()
+	{
+		PlayState.instance.callOnLuas('onCustomSubstateDestroy', [name]);
+		super.destroy();
+	}
+}
+
+#if hscript
+class HScript
+{
+	public static var parser:Parser = new Parser();
+	public var interp:Interp;
+
+	public var variables(get, never):Map<String, Dynamic>;
+
+	public function get_variables()
+	{
+		return interp.variables;
+	}
+
+	public function new()
+	{
+		interp = new Interp();
+		interp.variables.set('FlxG', FlxG);
+		interp.variables.set('FlxSprite', FlxSprite);
+		interp.variables.set('FlxCamera', FlxCamera);
+		interp.variables.set('FlxTimer', FlxTimer);
+		interp.variables.set('FlxTween', FlxTween);
+		interp.variables.set('FlxEase', FlxEase);
+		interp.variables.set('PlayState', PlayState);
+		interp.variables.set('game', PlayState.instance);
+		interp.variables.set('Paths', Paths);
+		interp.variables.set('Conductor', Conductor);
+		interp.variables.set('ClientPrefs', ClientPrefs);
+		interp.variables.set('Character', Character);
+		interp.variables.set('Alphabet', Alphabet);
+		interp.variables.set('CustomSubstate', CustomSubstate);
+		#if (!flash && sys)
+		interp.variables.set('FlxRuntimeShader', FlxRuntimeShader);
+		#end
+		interp.variables.set('ShaderFilter', openfl.filters.ShaderFilter);
+		interp.variables.set('StringTools', StringTools);
+
+		interp.variables.set('setVar', function(name:String, value:Dynamic)
+		{
+			PlayState.instance.variables.set(name, value);
+		});
+		interp.variables.set('getVar', function(name:String)
+		{
+			var result:Dynamic = null;
+			if(PlayState.instance.variables.exists(name)) result = PlayState.instance.variables.get(name);
+			return result;
+		});
+		interp.variables.set('removeVar', function(name:String)
+		{
+			if(PlayState.instance.variables.exists(name))
+			{
+				PlayState.instance.variables.remove(name);
+				return true;
+			}
+			return false;
+		});
+	}
+
+	public function execute(codeToRun:String):Dynamic
+	{
+		@:privateAccess
+		HScript.parser.line = 1;
+		HScript.parser.allowTypes = true;
+		return interp.execute(HScript.parser.parseString(codeToRun));
 	}
 }
 #end
