@@ -562,27 +562,6 @@ class PlayState extends MusicBeatState
 		healthBar.alpha = ClientPrefs.data.healthBarAlpha;
 		reloadHealthBarColors();
 		uiGroup.add(healthBar);
-	
-		healthBarP1 = new FlxSprite().loadGraphic(Paths.getImagePNG("healthBar2Inner"));
-		healthBarP1.setPosition(healthBar.x
-			+ healthBar.width / 2
-			- healthBarP1.width / 2,
-			healthBar.y
-			+ healthBar.height / 2
-		healthBarP1.antialiasing = true;
-		add(healthBarP1);
-		healthBarP1.cameras = [camHUD];
-		
-		healthBarP2 = new FlxSprite().loadGraphic(Paths.getImagePNG("healthBar2Inner"));
-		healthBarP2.setPosition(healthBar.x
-			+ healthBar.width / 2
-			- healthBarP2.width / 2,
-			healthBar.y
-			+ healthBar.height / 2
-			- healthBarP2.height / 2);
-		healthBarP2.antialiasing = true;
-		add(healthBarP2);
-		healthBarP2.cameras = [camHUD];
 
 		healthBarP1.color = (Main.characterColors[SONG.player1] != null ? Main.characterColors[SONG.player1] : 0xFF66FF33);
 		healthBarP2.color = (Main.characterColors[SONG.player2] != null ? Main.characterColors[SONG.player2] : 0xFFFF0000);
