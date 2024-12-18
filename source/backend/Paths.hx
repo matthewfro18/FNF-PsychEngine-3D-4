@@ -41,7 +41,7 @@ class Paths
 		return texture;
 	}
 
-	static public function getImagePNG(key:String, ?folder:String);
+	static public function getImagePNG(key:String, ?folder:String)
 	{
 		if (!Cashew.exists(key))
 		{
