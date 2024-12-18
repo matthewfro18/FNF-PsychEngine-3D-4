@@ -824,13 +824,9 @@ class PlayState extends MusicBeatState
 		}
 		#end
 	}
-	public function getLuaObject(tag:String, text:Bool=true):FlxSprite {
-		if(modchartSprites.exists(tag)) return modchartSprites.get(tag);
-		if(text && modchartTexts.exists(tag)) return modchartTexts.get(tag);
-		if(modchartViews.exists(tag)) return modchartViews.get(tag);
-		if(variables.exists(tag)) return variables.get(tag);
-		return null;
-	}
+
+	public function getLuaObject(tag:String):Dynamic
+		return variables.get(tag);
 
 	function startCharacterPos(char:Character, ?gfCheck:Bool = false) {
 		if(gfCheck && char.curCharacter.startsWith('gf')) { //IF DAD IS GIRLFRIEND, HE GOES TO HER POSITION
