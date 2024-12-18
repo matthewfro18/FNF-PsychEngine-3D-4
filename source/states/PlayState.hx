@@ -44,6 +44,7 @@ import states.stages.objects.*;
 #if LUA_ALLOWED
 import psychlua.*;
 #else
+import psychlua.ModchartSprite;
 import psychlua.LuaUtils;
 import psychlua.HScript;
 #end
@@ -96,9 +97,9 @@ class PlayState extends MusicBeatState
 	private var isCameraOnForcedPos:Bool = false;
 
 	#if (haxe >= "4.0.0")
-	public var boyfriendMap:Map<String, Boyfriend> = new Map();
-	public var dadMap:Map<String, Character> = new Map();
-	public var gfMap:Map<String, Character> = new Map();
+	public var boyfriendMap:Map<String, Character> = new Map<String, Character>();
+	public var dadMap:Map<String, Character> = new Map<String, Character>();
+	public var gfMap:Map<String, Character> = new Map<String, Character>();
 	public var variables:Map<String, Dynamic> = new Map();
 	public var modchartTweens:Map<String, FlxTween> = new Map<String, FlxTween>();
 	public var modchartSprites:Map<String, ModchartSprite> = new Map<String, ModchartSprite>();
@@ -108,7 +109,7 @@ class PlayState extends MusicBeatState
 	public var modchartTexts:Map<String, ModchartText> = new Map<String, ModchartText>();
 	public var modchartSaves:Map<String, FlxSave> = new Map<String, FlxSave>();
 	#else
-	public var boyfriendMap:Map<String, Boyfriend> = new Map<String, Boyfriend>();
+	public var boyfriendMap:Map<String, Character> = new Map<String, Character>();
 	public var dadMap:Map<String, Character> = new Map<String, Character>();
 	public var gfMap:Map<String, Character> = new Map<String, Character>();
 	public var variables:Map<String, Dynamic> = new Map<String, Dynamic>();
