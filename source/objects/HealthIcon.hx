@@ -43,7 +43,7 @@ class HealthIcon extends FlxSprite
 
 	public function changeChar(char:String)
 	{
-		if (FileSystem.exists("assets/images/healthicons/" + char))
+		if (FileSystem.exists("mods/images/healthicons/" + char))
 			this.char = char;
 		else
 			this.char = "face";
@@ -51,21 +51,21 @@ class HealthIcon extends FlxSprite
 
 	public function normal()
 	{
-		if (FileSystem.exists("assets/shared/images/healthicons/" + char + "/normal.png"))
+		if (FileSystem.exists("mods/images/healthicons/" + char + "/normal.png"))
 			loadGraphic(Paths.image("healthicons/" + char + "/normal"));
 		status = "normal";
 	}
 
 	public function win()
 	{
-		if (FileSystem.exists("assets/shared/images/healthicons/" + char + "/win.png"))
+		if (FileSystem.exists("mods/images/healthicons/" + char + "/win.png"))
 			loadGraphic(Paths.image("healthicons/" + char + "/win"));
 		status = "win";
 	}
 
 	public function lose()
 	{
-		if (FileSystem.exists("assets/shared/images/healthicons/" + char + "/lose.png"))
+		if (FileSystem.exists("mods/images/healthicons/" + char + "/lose.png"))
 			loadGraphic(Paths.image("healthicons/" + char + "/lose"));
 		status = "lose";
 	}
@@ -85,7 +85,7 @@ class HealthIcon extends FlxSprite
 
 	private var iconOffsets:Array<Float> = [0, 0];
 	public function changeIcon(char:String) {
-		if (FileSystem.exists("assets/shared/images/healthicons/" + char))
+		if (FileSystem.exists("mods/images/healthicons/" + char))
 			this.char = char;
 		else
 			this.char = "face";
