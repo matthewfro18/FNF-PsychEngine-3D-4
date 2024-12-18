@@ -1,5 +1,7 @@
 package psychlua;
 
+import flx3d.Flx3DView;
+
 class ModchartView extends Flx3DView
 {
 	public var wasAdded:Bool = false;
