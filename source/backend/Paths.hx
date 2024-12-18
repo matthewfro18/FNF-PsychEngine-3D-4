@@ -29,6 +29,18 @@ class Paths
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
 	inline public static var VIDEO_EXT = "mp4";
 
+	static var tmpPNGBytes:BitmapData = null;
+
+	static public function getBitmapPNG(key:String)
+	{
+		tmpPNGBytes = BitmapData.fromFile(Paths.image(key));
+		var texture = FlxG.stage.context3D.createTexture(tmpPNGBytes.width, tmpPNGBytes.height, Context3DTextureFormat.BGRA, false);
+		texture.uploadFromBitmapData(tmpPNGBytes);
+		tmpPNGBytes.dispose();
+		tmpPNGBytes = null;
+		return texture;
+	}
+
 	static public function getImagePNG(key:String)
 	{
 		if (!Cashew.exists(key))
@@ -50,6 +62,7 @@ class Paths
 	{
 		return FlxAtlasFrames.fromSpriteSheetPacker(getImagePNG(key), text(key, "images"));
 	}
+
 	public static function excludeAsset(key:String) {
 		if (!dumpExclusions.contains(key))
 			dumpExclusions.push(key);
